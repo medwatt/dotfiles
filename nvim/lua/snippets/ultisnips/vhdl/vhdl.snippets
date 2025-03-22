@@ -1,0 +1,498 @@
+#########################
+# Structure
+########################
+
+snippet com "Comment" b
+-------------------------------------------------------------------------------
+-- $1
+-------------------------------------------------------------------------------
+$0
+endsnippet
+
+snippet libs "Standard Libraries"
+library ieee;
+use ieee.std_logic_1164.all;${1:
+use ieee.numeric_std.all;
+use ieee.math_real.all;}
+endsnippet
+
+snippet ent "Entity Declaration" b
+entity ${1:`!v expand('%:t:r')`} is`!p snip.rv='\n\tgeneric (\n\t\t' if t[3] else ""`${3: }`!p snip.rv = '\n\t);' if t[3] else ""`
+	port (
+		$4
+	);
+end $1;$0
+endsnippet
+
+snippet arc "Architecture" b
+architecture ${1:beh} of ${2:`!v expand('%:t:r')`} is
+	$3
+begin
+	$4
+end $1;$0
+endsnippet
+
+snippet gen "Generic" b
+${1:<generic_name>}: ${2:<data_type>}${3: := ${4:<value>}}$0
+endsnippet
+
+snippet pkg "Package" b
+package${1: body} ${2:<package_name>} is
+	$3
+end $2;$0
+endsnippet
+
+#########################
+# Processes
+#########################
+
+snippet pr "Process" b
+process (${1:<sensitivity_list>})
+begin
+	$2
+end process;$0
+endsnippet
+
+snippet prc "Process with clock" b
+process (${1:clk})
+begin
+	if ($1'event and $1 = '1') then
+		$2
+	end if;
+end process;
+endsnippet
+
+snippet prcr "Process with clock and reset" b
+process (${1:clk}, ${2:reset})
+begin
+	if ($2 = '${3:1}') then
+		$4
+	elsif ($1'event and $1 = '1') then
+		$5
+	end if;
+end process;$0
+endsnippet
+
+
+#########################
+# Conditional
+########################
+
+# Concurrent Statements
+
+snippet cond "conditional signal assignment" b
+${1:<sig_name>} <= ${2:<true_expr>} when (${3:<bool_expr>}) else (${4:<false_expr>});
+endsnippet
+
+snippet sel "selected signal assignement" b
+with ${1:<selector_expr>} select
+	${2:<sig_name>} <= ${3:<val_expr_1>} when ${4:<choice_1>},
+	${5:<val_expr_n>} when others;
+endsnippet
+
+# Sequential Statements
+
+snippet if "if statement" b
+if (${1:<bool_expr>}) then
+	$2
+end if;
+endsnippet
+
+snippet ife "if ... else statement" b
+if (${1:<bool_expr>}) then
+	$2
+else
+	$3
+end if;
+endsnippet
+
+snippet ifee "if ... elsif ... else statement" b
+if (${1:<bool_expr>}) then
+	$2
+elsif (${1:<bool_expr>})
+	$3
+else
+	$4
+end if;
+endsnippet
+
+snippet elsif "... elsif" b
+elsif (${1:<bool_expr>}) then
+	$2
+endsnippet
+
+snippet case "case statement"
+case ${1:<selector_expr>} is
+	when ${2:<case_1>} =>
+		$3
+	when others =>
+		$4
+end case;
+endsnippet
+
+# Simulataneous Statements
+
+snippet use "if statement" b
+if (${1:<bool_expr>}) use
+	$2
+end use;
+endsnippet
+
+snippet usee "if ... else statement" b
+if (${1:<bool_expr>}) use
+	$2
+else
+	$3
+end use;
+endsnippet
+
+#########################
+# Loops
+#########################
+
+# Concurrent
+
+snippet forgen "for ... generate" b
+${1:<label>}: for ${2:i} in $3 ${4:to} $5 generate
+begin
+	$6
+end generate;
+endsnippet
+
+snippet ifgen "if ... generate" b
+${1:<label>}: if ${2:<bool_expr>} generate
+begin
+	$3
+end generate;
+endsnippet
+
+# Sequential
+
+snippet for "for ... loop" b
+for ${1:i} in $2 ${3:to} $4 loop
+	$5
+end loop;
+endsnippet
+
+snippet loop "loop" b
+loop
+	$1
+end loop;
+endsnippet
+
+snippet while "while ... loop" b
+while ${1:<bool_expr>} loop
+	$2
+end loop;
+endsnippet
+
+
+#######
+#Types#
+#######
+
+snippet enum "enumerated list" b
+type ${1:<identifier>} is (${2:<list>});
+endsnippet
+
+snippet sub "subtype" b
+subtype ${1:<identifier>} is ${2:<data_type>}${3: ${4:[<range_specification>]}};
+endsnippet
+
+snippet ar "1-dim array" b
+type ${1:<identifier>} is array (${2:<array_range>}) of ${3:<data_type>};
+endsnippet
+
+snippet uar "1-dim unconstrained array" b
+type ${1:<identifier>} is array (${2:<data_type>} range <>) of ${3:<data_type>};
+endsnippet
+
+snippet ar2 "2-dim array" b
+type ${1:<identifier>} is array (${2:<range_1>}, ${3:<range_2>}) of ${4:<data_type>};
+endsnippet
+
+snippet uar2 "2-dim unconstrained array" b
+type ${1:<identifier>} is array (${2:<data_type>} range <>, ${3:<data_type>} range <>) of ${4:<data_type>};
+endsnippet
+
+snippet range "integer/real type" b
+type ${1:<identifier>} is range ${2:<lower_bound>} to ${3:<upper_bound>};
+endsnippet
+
+snippet phy "physical type" b
+type ${1:<identifier>} is range ${2:<lower_bound>} to ${3:<upper_bound>}
+	units
+		${4:<unit_name>};
+		${5:{unit_name2 = int/real unit_name;}}
+	end units $1;
+endsnippet
+
+snippet record "type ... is range ... to ..." b
+type ${1:record_name} is record:
+	${2:element_name}: ${3:data_type};
+	${4:element_name}: ${5:data_type};
+end record $1;
+endsnippet
+
+snippet int "std_logic"
+integer
+endsnippet
+
+snippet nat "natural"
+natural
+endsnippet
+
+snippet l "std_logic"
+std_logic
+endsnippet
+
+snippet lv "std_logic_vector(... downto 0)"
+std_logic_vector($1 downto ${2:0})
+endsnippet
+
+snippet s "signed(... downto 0)"
+signed($1 downto ${2:0})
+endsnippet
+
+snippet u "unsigned(... downto 0)"
+unsigned($1 downto ${2:0})
+endsnippet
+
+
+########################
+#Functions & Procedures#
+########################
+
+snippet func "function declaration"
+function ${1:function_name} (${2:inputs}: ${3:data_type}) return ${4:return_type}${5: is
+begin
+	$6
+end $1};$0
+endsnippet
+
+snippet func2 "function declaration"
+function ${1:function_name} (
+	${2:input_1}: ${3:data_type};
+	${4:input_2}: ${5:data_type}
+	) return ${6:return_type}${7: is
+begin
+	$8
+end $1};$0
+endsnippet
+
+snippet proc "procedure declaration"
+procedure ${1:procedure_name} (${2:inputs}: ${3:data_type})${4: is
+begin
+	$5
+end $1};$0
+endsnippet
+
+snippet proc2 "procedure declaration"
+procedure ${1:procedure_name} (
+	${2:input_1}: ${3:data_type};
+	${4:input_2}: ${5:data_type}
+	)${6: is
+begin
+	$7
+end $1};$0
+endsnippet
+
+
+###########
+#Expansion#
+###########
+
+snippet oth "Others"
+(others=>'${1:0}')
+endsnippet
+
+snippet oth2 "a=(a'range=>'0')" i
+${1:<sig_name>}=($1'range=>'${2:0}')
+endsnippet
+
+snippet sig "signal" b
+signal ${1:<signal_name>}: ${2:<data_type>}${3: := ${4:<value>}};$0
+endsnippet
+
+snippet const "constant" b
+constant ${1:<constant_name>}: ${2:<data_type>} := ${3:<value>};$0
+endsnippet
+
+snippet var "variable" b
+variable ${1:<variable_name>}: ${2:<data_type>} := ${3:<value>};$0
+endsnippet
+
+snippet quant "variable" b
+quantity ${1:<across>} across ${2:<through>} through ${3:<terminal>};$0
+endsnippet
+
+
+#########################
+# Conversions
+#########################
+
+snippet tos "integer/natural to signed" i
+to_signed(${1:${VISUAL}}, ${2:size})
+endsnippet
+
+snippet tou "integer/natural to unsigned" i
+to_unsigned(${1:${VISUAL}}, ${2:size})
+endsnippet
+
+snippet toi "vector to integer" i
+to_integer(${1:${VISUAL}})
+endsnippet
+
+snippet ton "vector to natural" i
+to_natural(${1:${VISUAL}})
+endsnippet
+
+
+#########################
+# Others
+#########################
+
+snippet assert "assert (condition_when_false) report ... [severity ...]"
+assert (${1:<criteria_that_must_be_satisfied>})
+	report "${2:<when_criteria_is_not_satisfied>}"${3:
+	severity ${4:NOTE, WARNING, ERROR, AND FAILURE}};
+endsnippet
+
+
+#########################
+# Testbench Generator
+#########################
+
+snippet tb "vhdl testbench generator"
+`!p
+def vhdl_uut(vhdl_str):
+    uut_block = ''
+    sig_def_block = ''
+
+    # Regular expressions
+    entity_block_regex = r"entity\s+\w+.*?end([\w ]+)?;"
+    generic_block_regex = r"generic\s*\(.*?\);"
+    port_block_regex = r"port\s*\(.*?\);.*?(?=end)"
+    entity_name_regex = r"entity\s+(\w+)\sis"
+    architecture_name_regex = r"architecture\s+(\w+)\sof"
+    generics_regex = r"(\w.*?\w?)\s*?:\s*?(\w+).*?;?[\r\n]"
+    ports_regex = r"([\w, ]+):[ \t]*(?:in|out|inout)[ \t]*(.*?)(?=[;\r\n])"
+    clock_regex = r"(clk|clock)[\s\w,]*:\s*in.*?;"
+    reset_regex = r"(reset|rst|rstn)[\s\w,]*:\s*in.*?;"
+
+    # Get entity block
+    entity_block = get_block(entity_block_regex, vhdl_str)
+    if entity_block is None:
+        return "ERROR: VHDL file does not have an entity"
+
+    # Get port block
+    port_block = get_block(port_block_regex, entity_block)
+    if port_block is None:
+        return "ERROR: VHDL file does not have ports"
+
+    # Get generic block
+    generic_block = get_block(generic_block_regex, entity_block)
+
+    # Get entity name
+    entity_match = re.search(entity_name_regex, entity_block, re.I)
+    entity_name = entity_match.group(1)
+
+    # Get architecture name
+    architecture_match = re.search(architecture_name_regex, vhdl_str, re.I)
+    if architecture_match is not None:
+        architecture_name = architecture_match.group(1)
+    else:
+        architecture_name = "__architecture_name__"
+
+    # Acquiring generics
+    sig_names, sig_def = get_signals_from_block(generic_block, generics_regex, "generics")
+    if sig_names is not None:
+        gen_def_block = "\t-- Generics\n\t{0}\n".format(sig_def)
+        gen_map_block = "\tgeneric map (\n\t\t{0}\n\t)\n".format(sig_names)
+    else:
+        gen_def_block = None
+        gen_map_block = None
+
+    # Acquiring ports
+    sig_names, sig_def = get_signals_from_block(port_block, ports_regex, "ports")
+    if sig_names is not None:
+        ports_def_block = "\t-- Signals\n\t{0}\n".format(sig_def)
+        ports_map_block = "\tport map (\n\t\t{0}\n\t);\n".format(sig_names)
+
+    if gen_def_block is not None:
+        def_block = gen_def_block + ports_def_block
+        map_block = gen_map_block + ports_map_block
+    else:
+        def_block = ports_def_block
+        map_block = ports_map_block
+
+    # Check for clock
+    clock_match = re.search(clock_regex, port_block, re.I)
+    if clock_match is not None:
+        clock_name = clock_match.group(1)
+        clock_block = "{0} <= not {0} after 5 ns;".format(clock_name)
+
+    # Check for reset
+    reset_match = re.search(reset_regex, port_block, re.I)
+    if reset_match is not None:
+        reset_name = reset_match.group(1)
+        if (reset_name == "reset") or (reset_name == "rst"):
+            reset_block = "{0} <= '1', '0' after 5 ns;".format(reset_name)
+        else:
+            reset_block = "{0} <= '0', '1' after 5 ns;".format(reset_name)
+
+    if clock_match is not None:
+        clk_reset_block = "\t-- Clock generation\n\t{0}\n".format(clock_block)
+        if reset_match is not None:
+            clk_reset_block += "\n\t--Reset generation\n\t{0}\n".format(reset_block)
+
+    # Build testbench
+    uut_block = "\tuut: entity work.{0}({1})\n{2}".format(entity_name, architecture_name, map_block)
+    library_block = "library ieee;\nuse ieee.std_logic_1164.all;\n"
+    entity_tb_block = "entity {0}_tb is\nend {0}_tb;\n".format(entity_name)
+    if clock_match is not None:
+        architecture_block = "architecture testbench of {0}_tb is\n{1}\nbegin\n{2}\n{3}\n".format(entity_name, def_block, uut_block, clk_reset_block)
+    else:
+        architecture_block = "architecture testbench of {0}_tb is\n{1}\nbegin\n{2}\n".format(entity_name, def_block, uut_block)
+    stimulus_process_block = "\tstimuli: process\n\tbegin\n\n\tend process;\n"
+
+    return "{0}\n{1}\n{2}{3}\n end testbench;".format(library_block, entity_tb_block, architecture_block, stimulus_process_block)
+
+def get_block(regex_string, str):
+    block_match = re.search(regex_string, str, re.DOTALL|re.I)
+    if block_match is not None:
+        block = block_match.group(0)
+    else:
+        block = None
+    return block
+
+def get_signals_from_block(block, regex_string, gen_or_port):
+    if block is not None:
+        matches = re.findall(regex_string, block, re.I)
+        if matches is not None:
+            sig_names, sig_def = isolate_signals(matches, gen_or_port)
+            return sig_names, sig_def
+    else:
+        return None, None
+
+def isolate_signals(lst, gen_or_port):
+    signal_names_str = ''
+    signal_def_str = ''
+    signal_names_list = []
+    signal_def_list = []
+
+    obj = "constant" if gen_or_port == "generics" else "signal"
+    for item in lst:
+        signal_names = item[0].split(',')
+        signal_type = item[1]
+        new_signal_names = [sig.strip() for sig in signal_names]
+        signal_names_list += new_signal_names
+        signal_def_list += ["{0} {1}: {2};".format(obj, sig, signal_type) for sig in new_signal_names]
+    signal_names_str = ',\n\t\t'.join("{0} => {0}".format(sig) for sig in signal_names_list)
+    signal_def_str = '\n\t'.join("{0}".format(sig) for sig in signal_def_list)
+
+    return (signal_names_str, signal_def_str)
+
+snip.rv = vhdl_uut(snip.v.text)
+`
+endsnippet

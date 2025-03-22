@@ -1,0 +1,163 @@
+INFO:  latexindent-linux version 3.24.4, 2024-07-18, a script to indent .tex files
+       latexindent-linux lives here: /home/medwatt/.local/share/nvim/mason/packages/latexindent/
+       Sun Mar 16 06:15:05 2025
+       Filename: a.tex
+INFO:  Processing switches:
+       -l|--localSettings: Read localSettings YAML file
+INFO:  Directory for backup files and log file indent.log:
+       .
+INFO:  YAML settings read: defaultSettings.yaml
+       Reading defaultSettings.yaml from /home/medwatt/.local/share/nvim/mason/packages/latexindent/defaultSettings.yaml
+       Reading defaultSettings.yaml (2nd attempt) from /home/medwatt/.local/share/nvim/mason/packages/latexindent/../../texmf-dist/scripts/latexindent/defaultSettings.yaml
+       and then, if necessary, /home/medwatt/.local/share/nvim/mason/packages/latexindent/LatexIndent/defaultSettings.yaml
+INFO:  YAML reading settings
+       Home directory is /home/medwatt
+       latexindent.pl didn't find indentconfig.yaml or .indentconfig.yaml
+       see all possible locations: https://latexindentpl.readthedocs.io/en/latest/sec-appendices.html#indentconfig-options)
+INFO:  YAML settings read: -l switch
+       Adding /home/medwatt/.config/nvim/lua/plugins/latexindent/settings.yaml to YAML read paths
+INFO:  YAML settings, reading from the following files:
+       Reading USER settings from /home/medwatt/.config/nvim/lua/plugins/latexindent/settings.yaml
+       ---
+       defaultIndent: '    '
+       indentAfterItems:
+         description: '1'
+         description*: '1'
+         enumerate: '1'
+         enumerate*: '1'
+         itemize: '1'
+         itemize*: '1'
+         list: '1'
+       indentRules:
+         myenvironment: "\t\t"
+       itemNames:
+         item: '1'
+         myitem: '1'
+       modifyLineBreaks:
+         commands:
+           label:
+             CommandStartsOnOwnLine: '1'
+         condenseMultipleBlankLinesInto: '1'
+         environments:
+           enumerate:
+             BeginStartsOnOwnLine: '4'
+             BodyStartsOnOwnLine: '0'
+             EndFinishesWithLineBreak: '4'
+             EndStartsOnOwnLine: '0'
+           equation:
+             BeginStartsOnOwnLine: '4'
+             BodyStartsOnOwnLine: '0'
+             EndFinishesWithLineBreak: '4'
+             EndStartsOnOwnLine: '0'
+           equation*:
+             BeginStartsOnOwnLine: '4'
+             BodyStartsOnOwnLine: '0'
+             EndFinishesWithLineBreak: '4'
+             EndStartsOnOwnLine: '0'
+           figure:
+             BeginStartsOnOwnLine: '4'
+             BodyStartsOnOwnLine: '0'
+             EndFinishesWithLineBreak: '4'
+             EndStartsOnOwnLine: '0'
+           itemize:
+             BeginStartsOnOwnLine: '4'
+             BodyStartsOnOwnLine: '0'
+             EndFinishesWithLineBreak: '4'
+             EndStartsOnOwnLine: '0'
+         oneSentencePerLine:
+           manipulateSentences: '0'
+           multipleSpacesToSingle: '1'
+           removeSentenceLineBreaks: '1'
+           sentenceIndent: ''
+           sentencesBeginWith:
+             A-Z: '1'
+             a-z: '0'
+             other: '0'
+           sentencesDoNOTcontain:
+             other: \\begin
+           sentencesEndWith:
+             basicFullStop: '0'
+             betterFullStop: '1'
+             exclamationMark: '1'
+             other: '0'
+             questionMark: '1'
+           sentencesFollow:
+             blankLine: '1'
+             commentOnPreviousLine: '1'
+             exclamationMark: '1'
+             fullStop: '1'
+             other: '0'
+             par: '1'
+             questionMark: '1'
+             rightBrace: '1'
+           textWrapSentences: '0'
+         preserveBlankLines: '1'
+         specialBeginEnd:
+           inlineMath:
+             SpecialBeginStartsOnOwnLine: '1'
+             SpecialBodyStartsOnOwnLine: '0'
+             SpecialEndFinishesWithLineBreak: '1'
+             SpecialEndStartsOnOwnLine: '0'
+         textWrapOptions:
+           blocksBeginWith:
+             0-9: '0'
+             A-Z: '1'
+             a-z: '1'
+             other: '0'
+           blocksEndBefore:
+             commentOnOwnLine: '1'
+             filecontents: '1'
+             other: \\begin\{|\\\[|\\end\{
+             verbatim: '1'
+           blocksFollow:
+             blankLine: '1'
+             commentOnPreviousLine: '1'
+             filecontents: '1'
+             headings: '1'
+             other: \\\]|\\item(?:\h|\[)
+             par: '1'
+             verbatim: '1'
+           columns: '80'
+           comments:
+             inheritLeadingSpace: '0'
+             wrap: '0'
+           huge: overflow
+           multipleSpacesToSingle: '1'
+           removeBlockLineBreaks: '0'
+           separator: ''
+           when: after
+       noAdditionalIndentGlobal:
+         mandatoryArguments: '1'
+         specialBeginEnd: '1'
+       specialBeginEnd:
+         displayMath:
+           begin: (?<!\\)\\\[
+           end: \\\]
+           lookForThis: '0'
+         displayMathTeX:
+           begin: \$\$
+           end: \$\$
+           lookForThis: '0'
+         inlineMath:
+           begin: (?<!\$)(?<!\\)\$(?!\$)(?=[\w\\])
+           body: '[^$]{40,}'
+           end: (?<!\\)\$[\.,:;](?!\$)
+           lookForThis: '1'
+         specialBeforeCommand: '0'
+       verbatimEnvironments:
+         lstlisting: '1'
+         minted: '1'
+         verbatim: '1'
+
+WARN:  modifyLineBreaks specified and m switch is *not* active
+       perhaps you intended to call
+            latexindent.pl -m -l /home/medwatt/.config/nvim/lua/plugins/latexindent/settings.yaml a.tex
+INFO:  Phase 1: searching for objects
+INFO:  Phase 2: finding surrounding indentation
+INFO:  Phase 3: indenting objects
+INFO:  Phase 4: final indentation check
+INFO:  Output routine:
+       Not outputting to file; see -w and -o switches for more options.
+       --------------
+INFO:  Please direct all communication/issues to:
+        https://github.com/cmhughes/latexindent.pl

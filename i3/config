@@ -1,0 +1,517 @@
+# variables <<<
+
+# modifier keys
+set $alt      Mod1
+set $ctrl     Ctrl
+set $shift    Shift
+set $super    Mod4
+
+# monitors
+set $firstMonitor eDP-1
+# xrandr --listmonitors
+set $secondMonitor DP-1-1
+
+# bar font and borders
+set $wm_setting_font                 pango:Source Sans Pro, Semibold 11
+set $bar_setting_font                pango:DejaVu Sans Mono, Font Awesome 12
+set $wm_setting_border_size          1
+
+# common programs
+set $editor            nvim
+set $terminal          kitty --single-instance
+set $browser           firefox
+# >>>
+
+# i3 settings <<<
+
+#############
+#  borders  #
+#############
+
+# setting border style to pixel eliminates title bars
+default_border pixel $wm_setting_border_size
+default_floating_border pixel $wm_setting_border_size
+# for_window [all] border pixel $wm_setting_border_size
+for_window [floating] border normal
+
+# smart_borders on
+
+## set the font used for titlebars (which are hidden here)
+font $wm_setting_font
+
+## use Mouse+$super to drag floating windows to their wanted position
+## use right mouse button to resize (press shift will resize proportionally)
+floating_modifier $super
+# floating_minimum_size 55 x 30
+
+## smart|urgent|focus|none
+focus_on_window_activation smart
+
+## gaps (was 11)
+# gaps inner 12
+# gaps outer 12
+
+
+focus_follows_mouse yes
+# >>>
+
+# startup scripts <<<
+
+########################################
+exec --no-startup-id xcalib -d :0 -s 0 "$HOME/.local/share/DisplayCAL/storage/NV156FHM-N61 #1 2023-12-04 21-53 D8500 2.2 F-S XYZLUT+MTX/NV156FHM-N61 #1 2023-12-04 21-53 D8500 2.2 F-S XYZLUT+MTX.icc"
+
+# prevent clipboard from losing its content when application closes
+exec --no-startup-id parcellite --no-icon
+
+# use KDE's authentication agent
+exec --no-startup-id /usr/bin/lxqt-policykit-agent
+
+# use KDE's power manager to manage laptop power
+exec --no-startup-id /usr/lib/org_kde_powerdevil
+
+# start the compositor
+exec --no-startup-id picom
+
+# enable alttab to allow for switching between windows
+exec --no-startup-id "$HOME/.config/i3/alttab/alttab -p center -t 200x200"
+
+# enable alttab to allow for switching between workspaces
+exec --no-startup-id "$HOME/.config/i3/alttab/alttab -mk Super_L -p center -t 200x200 -d 3 -sc 0"
+
+# start wine
+exec --no-startup-id $HOME/coding/scripts/wine-restart
+
+########################################
+#            execute always            #
+########################################
+# start the notification manager
+exec_always --no-startup-id dunst
+
+## my_script that controls the workspaces
+# exec_always --no-startup-id "killall workspace_script_3.py; $HOME/.config/i3/scripts/workspace_script_3.py"
+exec_always --no-startup-id "killall main_i3ipc.py; $HOME/.config/i3/i3ipc/main_i3ipc.py"
+# >>>
+
+# workspaces <<<
+
+# workspace definitions <<<
+
+#########################
+#  numbered workspaces  #
+#########################
+
+set $ws1  "1"
+set $ws2  "2"
+set $ws3  "3"
+set $ws4  "4"
+set $ws5  "5"
+set $ws6  "6"
+set $ws7  "7"
+set $ws8  "8"
+set $ws9  "9"
+
+######################
+#  named workspaces  #
+######################
+
+set $ws_math      "A"
+# B is used for browser
+set $ws_code      "C"
+set $ws_dict      "D"
+set $ws_explorer  "E"
+# F is used to toggle fullscreen
+set $ws_inkscape  "I"
+set $ws_jupyter   "J"
+set $ws_eda       "K"
+set $ws_spice     "L"
+set $ws_mail      "M"
+set $ws_editor    "N"
+set $ws_obs       "O"
+set $ws_pdf       "P"
+# R is used to resize window
+set $ws_settings  "S"
+set $ws_translate "T"
+set $ws_vm        "U"
+set $ws_video     "V"
+set $ws_whatsapp  "W"
+set $ws_texmacs   "X"
+set $ws_zotero    "Y"
+set $ws_zoom      "Z"
+
+
+set $ws_stream    "󰑈"
+# >>>
+
+# workspace rules <<<
+
+########################################
+#  open workspace in specific monitor  #
+########################################
+
+workspace $ws1 output $firstMonitor
+workspace $ws2 output $firstMonitor
+workspace $ws3 output $firstMonitor
+workspace $ws4 output $firstMonitor
+workspace $ws5 output $secondMonitor
+workspace $ws6 output $secondMonitor
+workspace $ws7 output $secondMonitor
+workspace $ws8 output $secondMonitor
+workspace $ws9 output $secondMonitor
+# >>>
+
+# assign application to workspace <<<
+
+#######################################
+#  open window in specific workspace  #
+#######################################
+assign [class="dolphin"]                             $ws_explorer
+assign [class="obs"]                                 $ws_obs
+assign [class="code"]                                $ws_code
+assign [class="vlc|smplayer"]                        $ws_video
+assign [class="systemsettings"]                      $ws_settings
+assign [class="ltspice.exe"]                         $ws_spice
+assign [class="zoom"]                                $ws_zoom
+assign [class="Goldendict"]                          $ws_dict
+assign [class="vmware"]                              $ws_vm
+assign [class="zotero"]                              $ws_zotero
+assign [class="okular"]                              $ws_pdf
+assign [class="okular|pdfxedit.exe"]                 $ws_pdf
+assign [class="texmacs.bin|Texmacs.bin|Mogan|mogan"] $ws_texmacs
+assign [instance="org.inkscape.Inkscape"]            $ws_inkscape
+
+# cadence
+assign [class="virtuoso"]   $ws_eda
+assign [class="viva"]       $ws_eda
+assign [class="libManager"] $ws_eda
+assign [class="Vsim"]       $ws_eda
+
+############
+#  layout  #
+############
+for_window [class="kcalc"] floating enable, move position center
+for_window [class="URxvt"] floating enable, move position center
+
+for_window [instance="org.inkscape.Inkscape"] layout tabbed
+for_window [class="okular"] layout tabbed
+for_window [class="smplayer"] layout tabbed
+for_window [class="zoom"] layout tabbed
+for_window [class="pdfxedit"] layout tabbed
+for_window [class="texmacs.bin|Texmacs.bin|Mogan|mogan"] layout tabbed
+
+# cadence
+for_window [class="virtuoso"] floating enable, move position center
+for_window [class="viva"] floating enable, move position center
+for_window [class="libManager"] layout tabbed, move position center
+for_window [class="virtuoso" title="^.*Layout Suite|Visualization|Analysis|maestro|Virtuoso ADE Explorer Editing|Schematic Editor|Symbol Editor.*$"] floating disable
+for_window [class="viva" title="^.*Visualization.*$"] floating disable
+for_window [class="virtuoso" title="^.*spectre\.out$"] floating enable, move position 0 1000
+for_window [class="virtuoso" floating] move container to workspace $ws_eda
+
+# python
+for_window [class="matplotlib"] floating enable, move position center
+for_window [title="^Figure\s+\d+$"] floating enable, move position center
+
+# this is to fix the werid issue where if the pixel is less than 5, it becomes impossible to focus on a floating window
+# for_window [class="LTspice.exe"] border pixel 100
+# for_window [class="LTspice.exe" floating] border normal
+# for_window [class="ltspice.exe" floating] move container to workspace $ws_spice
+
+for_window [class="photoshop.exe"] move container to workspace $ws9
+for_window [class="photoshop.exe"] border pixel 25
+for_window [class="photoshop.exe"] border normal
+for_window [class="photoshop.exe"] resize set 1920 1080
+
+for_window [class="feh"] floating enable
+
+#  open btop
+for_window [instance="kitty_btop"] floating enable, resize set 800 800, move position center, border pixel 2
+bindsym $ctrl+Escape nop mode_launch_app btop
+
+# open fzf to find files
+for_window [instance="kitty_fzf"] floating enable, resize set 1200 800, move position center, border pixel 2
+bindsym $super+slash nop mode_launch_app fzf_search
+
+# >>>
+
+# >>>
+
+# keybindigs <<<
+
+# workspaces <<<
+
+#####################
+#  Go to Workspace  #
+#####################
+
+# go to numbered workspace
+bindsym $super+1 workspace $ws1
+bindsym $super+2 workspace $ws2
+bindsym $super+3 workspace $ws3
+bindsym $super+4 workspace $ws4
+bindsym $super+5 workspace $ws5
+bindsym $super+6 workspace $ws6
+bindsym $super+7 workspace $ws7
+bindsym $super+8 workspace $ws8
+bindsym $super+9 workspace $ws9
+
+# open application in named workspace and switch to workspace (controlled by script.py)
+bindsym $super+a nop mode_launch_app_in_named_workspace
+bindsym $super+c nop mode_launch_app_in_named_workspace
+bindsym $super+d nop mode_launch_app_in_named_workspace
+bindsym $super+i nop mode_launch_app_in_named_workspace
+bindsym $super+j nop mode_launch_app_in_named_workspace
+bindsym $super+k nop mode_launch_app_in_named_workspace
+bindsym $super+l nop mode_launch_app_in_named_workspace
+bindsym $super+m nop mode_launch_app_in_named_workspace
+bindsym $super+n nop mode_launch_app_in_named_workspace
+bindsym $super+o nop mode_launch_app_in_named_workspace
+bindsym $super+p nop mode_launch_app_in_named_workspace
+bindsym $super+s nop mode_launch_app_in_named_workspace
+bindsym $super+t nop mode_launch_app_in_named_workspace
+bindsym $super+u nop mode_launch_app_in_named_workspace
+bindsym $super+v workspace $ws_video
+bindsym $super+w nop mode_launch_app_in_named_workspace
+bindsym $super+x nop mode_launch_app_in_named_workspace
+bindsym $super+y nop mode_launch_app_in_named_workspace
+bindsym $super+z nop mode_launch_app_in_named_workspace
+
+# others
+bindsym $super+F12 workspace $ws_stream
+
+#################
+#  scratchpads  #
+#################
+
+bindsym $super+minus nop mode_toggle_scratchpad Thunar thunar
+bindsym $super+h nop mode_toggle_scratchpad kwrite kwrite
+
+##########################
+#  workspace navigation  #
+##########################
+
+# move focused workspace between monitors
+bindsym $super+$ctrl+Right move workspace to output right
+bindsym $super+$ctrl+Left  move workspace to output left
+
+bindsym $super+comma workspace prev
+bindsym $super+period workspace next
+
+# toggle between workspaces (controlled by script.py)
+# bindsym $super+Tab nop mode_workspace_back_and_forth
+# bindsym $alt+Tab nop mode_window_back_and_forth
+
+# >>>
+
+# windows <<<
+
+#######################
+#  window navigation  #
+#######################
+
+# change focus
+bindsym $super+Left   focus left
+bindsym $super+Down   focus down
+bindsym $super+Up     focus up
+bindsym $super+Right  focus right
+
+# move focused window
+bindsym $super+$shift+Left   move left
+bindsym $super+$shift+Down   move down
+bindsym $super+$shift+Up     move up
+bindsym $super+$shift+Right  move right
+
+# move focused window to numbered workspace
+bindsym $super+$shift+1 move container to workspace $ws1
+bindsym $super+$shift+2 move container to workspace $ws2
+bindsym $super+$shift+3 move container to workspace $ws3
+bindsym $super+$shift+4 move container to workspace $ws4
+bindsym $super+$shift+5 move container to workspace $ws5
+bindsym $super+$shift+6 move container to workspace $ws6
+bindsym $super+$shift+7 move container to workspace $ws7
+bindsym $super+$shift+8 move container to workspace $ws8
+bindsym $super+$shift+9 move container to workspace $ws9
+
+# move focused container to named workspace
+bindsym $super+$shift+c move container to workspace $ws_code
+bindsym $super+$shift+d move container to workspace $ws_dict
+bindsym $super+$shift+e move container to workspace $ws_explorer
+bindsym $super+$shift+i move container to workspace $ws_inkscape
+bindsym $super+$shift+j move container to workspace $ws_jupyter
+bindsym $super+$shift+k move container to workspace $ws_eda
+bindsym $super+$shift+l move container to workspace $ws_spice
+bindsym $super+$shift+m move container to workspace $ws_mail
+bindsym $super+$shift+n move container to workspace $ws_editor
+bindsym $super+$shift+o move container to workspace $ws_obs
+bindsym $super+$shift+p move container to workspace $ws_pdf
+bindsym $super+$shift+s move container to workspace $ws_settings
+bindsym $super+$shift+t move container to workspace $ws_translate
+bindsym $super+$shift+u move container to workspace $ws_vm
+bindsym $super+$shift+v move container to workspace $ws_video
+bindsym $super+$shift+w move container to workspace $ws_whatsapp
+bindsym $super+$shift+x move container to workspace $ws_texmacs
+bindsym $super+$shift+y move container to workspace $ws_zotero
+bindsym $super+$shift+z move container to workspace $ws_zoom
+
+bindsym $super+$shift+F12 move container to workspace $ws_stream
+
+# close the focused window
+bindsym $alt+F4 kill
+bindsym $super+BackSpace kill
+bindsym $super+$shift+BackSpace nop mode_close_all_windows_in_worksapce
+
+# kill the focused window
+bindsym $super+q exec $terminal xkill
+
+# Go to empty workspace
+bindsym $super+space nop mode_go_to_empty_workspace
+
+# >>>
+
+# containers <<<
+
+######################
+#  container layout  #
+######################
+
+# toggle between tabbed and split
+bindsym $super+$alt+t layout toggle tabbed split
+
+# toggle between floating and tiled mode
+bindsym $super+$alt+f floating toggle
+
+# make window appear in all workspaces
+bindsym $super+$alt+s sticky toggle
+
+# select tab group
+bindsym $super+$alt+a focus parent
+
+# split vertically
+bindsym $super+$alt+h splitv
+
+# split horrizontally
+bindsym $super+$alt+v splith
+
+# enter fullscreen mode for the focused window
+bindsym $super+f fullscreen toggle
+
+# >>>
+
+# running stuff <<<
+
+#################
+#  i3 specific  #
+#################
+
+# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+bindsym $super+$shift+r restart
+
+###################
+#  open programs  #
+###################
+
+# open terminal
+bindsym $super+Return exec $terminal
+
+# open web browser
+bindsym $super+b exec $browser
+
+# open rofi to launch applications
+bindsym $alt+space exec rofi -modi drun -show drun -show-icons -drun-match-fields name
+
+#################
+#  run scripts  #
+#################
+
+# open neovim and compile latex
+bindsym $super+$alt+n exec /home/medwatt/coding/scripts/neovim_terminal.sh
+
+# screenshot tool (maim)
+bindsym Print exec --no-startup-id "maim -s | xclip -selection clipboard -t image/png"
+bindsym $ctrl+Print exec --no-startup-id $HOME/coding/scripts/floating_screenshot
+
+# bindsym $shift+Print exec --no-startup-id "maim -i $(xdotool getactivewindow) | xclip -selection clipboard -t image/png"
+# bindsym $alt+Print exec --no-startup-id "maim | xclip -selection clipboard -t image/png"
+
+# copy latex from texmacs
+bindsym $super+$alt+y exec --no-startup-id $HOME/coding/scripts/texmacs_latex_cleanup/texmacs_copy_latex
+
+# switch keyboard language
+bindsym $super+$alt+l exec --no-startup-id $HOME/.config/i3/scripts/toggle_keyboard_language.sh
+
+# show me my stuff
+bindsym $super+$alt+Home exec --no-startup-id kwrite $HOME/Documents/my_address
+
+# >>>
+
+# >>>
+
+# modes <<<
+
+# resize window
+mode "resize" {
+    bindsym Left  resize shrink width  2 px or 2 ppt
+    bindsym Down  resize grow height   2 px or 2 ppt
+    bindsym Up    resize shrink height 2 px or 2 ppt
+    bindsym Right resize grow width    2 px or 2 ppt
+
+    # back to normal: Enter or Escape or $super+r
+    bindsym Return   mode "default"
+    bindsym Escape   mode "default"
+    bindsym $super+r mode "default"
+}
+bindsym $super+r mode "resize"
+
+# open folders in dolphin (controlled by workspace-script.py)
+set $mode_dir Type a letter to open a directory
+mode "$mode_dir" {
+    bindsym c nop mode_launch_dolphin, mode "default"
+    bindsym d nop mode_launch_dolphin, mode "default"
+    bindsym e nop mode_launch_dolphin, mode "default"
+    bindsym g nop mode_launch_dolphin, mode "default"
+    bindsym h nop mode_launch_dolphin, mode "default"
+    bindsym l nop mode_launch_dolphin, mode "default"
+    bindsym r nop mode_launch_dolphin, mode "default"
+    bindsym v nop mode_launch_dolphin, mode "default"
+    bindsym w nop mode_launch_dolphin, mode "default"
+
+    # back to normal: Enter or Escape
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $super+e mode "$mode_dir"
+# >>>
+
+# lockscreen <<<
+set $Locker $HOME/.config/i3/scripts/i3lock.sh
+set $mode_system System Mode: lock [l], logout [e], suspend [s], hibernate [h], reboot [r], shutdown [x]
+mode "$mode_system" {
+    bindsym l exec --no-startup-id $Locker,                        mode "default"
+    bindsym e exec --no-startup-id i3-msg exit,                    mode "default"
+    bindsym s exec --no-startup-id $Locker && systemctl suspend,   mode "default"
+    bindsym h exec --no-startup-id $Locker && systemctl hibernate, mode "default"
+    bindsym r exec --no-startup-id systemctl reboot,               mode "default"
+    bindsym x exec --no-startup-id systemctl poweroff -i,          mode "default"
+
+    # back to normal: Enter or Escape
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $super+Escape mode "$mode_system"
+# >>>
+
+# monitor control <<<
+# set $monitor $HOME/.config/i3/scripts/external-monitor.sh
+#
+# set $display Display Mode: clone (c), right (r), refresh (x)
+# mode "$display" {
+#     bindsym c exec $monitor "clone",   mode "default"
+#     bindsym r exec $monitor "right",   mode "default"
+#     bindsym x exec $monitor "refresh", mode "default"
+#
+#     # back to normal: Enter or Escape
+#     bindsym Return mode "default"
+#     bindsym Escape mode "default"
+# }
+bindsym $super+F7 nop mode_choose_display_mode
+
+# >>>

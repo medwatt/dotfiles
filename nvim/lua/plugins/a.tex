@@ -1,0 +1,77 @@
+% Sec: Introduction <<<
+\section{Introduction}
+\label{sec:introduction}
+
+Due to the demanding device and circuit requirements for neural network
+training~\cite{burr2017neuromorphic, gokmen2016}, the acceleration of training
+has long been viewed as a future prospect for analog neuromorphic accelerators.
+While memory crossbars have been successfully trained, most demonstrations
+merely test the learning capability of the memory devices. Typically, an
+\emph{in situ} training approach is adopted: forward propagation occurs on the
+crossbars, weight updates are computed off-chip, and the updated weights are
+then programmed back~\cite{kataeva2015}. However, these off-line methods cannot
+correct aging, imprecise memristor programming, or evolving hardware
+imperfections that cannot be predicted in advance.
+
+The recent introduction of the Equilibrium Propagation (EP) learning framework
+has made end-to-end training on analog hardware a real
+possibility~\cite{scellier2017equilibrium}. This is mainly due to the fact that
+EP uses the same computations for both the forward and backward phases of
+training, precluding the necessity for an off-chip processor~\cite{kandel2020}.
+While EP greatly simplifies the circuit requirements, the full implementation
+of EP demands hardware requirements that may be outside the capabilities of
+many resource-constrained hardware, such as those targeted at the edge.
+
+One of the issues of implementing EP accurately in hardware stems from the
+requirement of saving the gradient of every memory device in the circuit. This
+gradient could be stored in one of three ways. First, the gradient could be
+stored in a digital memory. However, this would require analog-to-digital and
+digital-to-analog converters, which are both energy and resource
+inefficient~\cite{xia2016conv}. Second, they could be stored in other emerging
+memory devices like RRAMs. However, this would require extremely accurate
+programming of devices which are inherently difficult to
+program~\cite{ambrogio2018, gokmen2020, gokmen2021, song2024}. Finally, these
+could be stored in on-chip capacitors~\cite{ambrogio2018}. While on-chip
+capacitors can indeed store analog voltage directly, and hence avoid the use of
+expensive data converters, they are much larger in size compared to the
+transistors that implement the logic or the memory devices that store the
+weights. As a result, the silicon footprint would be dominated by the
+capacitors needed only for training. Moreover, even if silicon footprint is not
+a major concern, the accurate reading/writing of gradients on a capacitive
+crossbar comes with major layout concerns.
+
+To address the aforementioned issues, we consider a slightly less demanding
+training scheme, which we call LOw-Rank Equilibrium Propagation (LOREP). In
+this scheme, we assume that the weights have been pre-trained externally and
+have been programmed into the weight crossbars. However, due to inaccuracies in
+the programming, device-to-device variability, noise, etc., the accuracy of the
+analog network is diminished. The goal is then to investigate how much accuracy
+can be recovered by using a less demanding implementation of EP. This could
+prove useful to combat component failures and drift in environments where
+physical access of the device is impossible. The contributions of this paper is
+as follows:
+
+\begin{itemize}
+
+    \item We conduct a detailed resource analysis, revealing that gradient
+        storage can dominate the total area, overshadowing memristors and
+        transistors.
+
+    \item We reformulate the EP weight update in outer product form, enabling
+        streaming low-rank approximation methods.
+
+    \item We propose a simplified rank-1 approach that is easier to implement
+        in hardware, significantly reducing storage overhead.
+
+    \item We validate our approach through SPICE-level simulations, showing
+        robust accuracy retention even with severe parameter drifts.
+
+\end{itemize}
+
+This paper is organized as follows. In Section II we give more details about
+the hardware implementation of the EP algorithm, especially those related to
+problem of computing and storing the gradient. In Section III, we describe the
+low rank approximation of the EP algorithm. In section IV, we describe the
+experimental methodology and present the results of our investigations in
+Section V.
+% >>>

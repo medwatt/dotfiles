@@ -1,0 +1,27 @@
+priority 10
+snippet ';s([bdeistuw])' "font styles" riA
+`!p
+d = {
+    "b":"\\textbf",
+    "d":"\\uuline",
+    "e":"\\emph",
+    "i":"\\textit",
+    "s":"\\textsf",
+    "t":"\\texttt",
+    "u":"\\uline",
+    "w":"\\uwave"
+    }
+snip.rv = d[match.group(1)]`{$1${VISUAL}}$0
+endsnippet
+
+priority 10
+snippet ';(\d)' "font sizes" riA
+`!p
+s = ["\\tiny", "\\scriptsize", "\\footnotesize", "\\small", "\\normalsize", "\\large", "\\Large", "\\LARGE", "\\huge", "\\Huge"]
+snip.rv = s[int(match.group(1))-1]`{$1${VISUAL}}$0
+endsnippet
+
+
+
+
+# vim:ft=snippets:

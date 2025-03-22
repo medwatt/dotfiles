@@ -1,0 +1,193 @@
+priority -50
+
+######################
+# Elementary Devices #
+######################
+
+snippet rr "Resistor" Ab
+R$1 ${2:N+} ${3:N-} ${4:value}
+endsnippet
+
+# snippet cc "Capacitor" Ab
+# C$1 ${2:N+} ${3:N-} ${4:value}`!p snip.rv=" ic=" if t[5] else ""`${5:0}
+# endsnippet
+
+snippet cc "Capacitor" Ab
+C$1 ${2:N+} ${3:N-} ${4:value}${5: ${6:a_1} ${7:a_2}${8: ${9:deep}}}
+endsnippet
+
+snippet ll "Inductor" Ab
+L$1 ${2:N+} ${3:N-} ${4:value}`!p snip.rv=" ic=" if t[5] else ""`${5:0}
+endsnippet
+
+snippet dd "Diode" Ab
+D$1 ${2:N+} ${3:N-} ${4:model_name}
+endsnippet
+
+snippet mos ".ac type np fstart fsto" Ab
+M$1 ${2:ND} ${3:NG} ${4:NS} ${5:<NB>} ${6:model_name} l=$7 w=$8
+endsnippet
+
+snippet bjt ".ac type np fstart fsto" Ab
+Q$1 ${2:NC} ${3:NB} ${4:NE} ${5:model_name}
+endsnippet
+
+
+###############################
+# Voltage Sources #
+###############################
+
+snippet vdc "Voltage Source" Ab
+V$1 ${2:N+} ${3:N-} dc ${4:value}
+endsnippet
+
+snippet vac "Voltage Source" Ab
+V$1 ${2:N+} ${3:N-} ac ${4:magnitude} ${5:[phase]}
+endsnippet
+
+snippet pulse "pulse" Ab
+V$1 ${2:N+} ${3:N-} PULSE (${4:V_low} ${5:V_high} ${6:T_delay} ${7:T_rise} ${8:T_fall} ${9:T_on} ${10:T_period})
+endsnippet
+
+snippet sin "Current Source" Ab
+V$1 ${2:N+} ${3:N-} SIN (${4:V_offset} ${5:V_amplitude} ${6:freq})
+endsnippet
+
+snippet pwl "Piece-Wise Linear" Ab
+V$1 ${2:N+} ${3:N-} PWL (${4:\{time voltage_level\}})
+endsnippet
+
+###################
+# Current Sources #
+###################
+
+snippet cur "Current Source" Ab
+I$1 ${2:N+} ${3:N-} ${4:value}
+endsnippet
+
+############################
+# Linear Dependent Sources #
+############################
+
+snippet vcvs "voltage controlled voltage source" Ab
+E$1 ${2:N+} ${3:N-} ${4:NC+} ${5:NC-} ${6:voltage_gain}
+endsnippet
+
+snippet cccs "current controlled current source" Ab
+F$1 ${2:N+} ${3:N-} ${4:voltage_source_name} ${5:current_gain}
+endsnippet
+
+snippet vccs "voltage controlled current source" Ab
+G$1 ${2:N+} ${3:N-} ${4:NC+} ${5:NC-} ${6:transconductance}
+endsnippet
+
+snippet ccvs "current controlled voltage source" Ab
+H$1 ${2:N+} ${3:N-} ${4:voltage_source_name} ${5:resistance}
+endsnippet
+
+######################
+# Behavioral Sources #
+######################
+
+snippet bv "voltage behavioral source" Ab
+b$1 ${2:N+} ${3:N-} ${4:V} = ${5:expr}
+endsnippet
+
+snippet bi "current behavioral source" Ab
+b$1 ${2:N+} ${3:N-} ${4:I} = ${5:expr}
+endsnippet
+
+
+############
+# Switches #
+############
+
+snippet vsw "voltage controlled switch" Ab
+S$1 ${2:N+} ${3:N-} ${4:NC+} ${5:NC-} ${6:model} ${7:ON|OFF}
+endsnippet
+
+snippet csw "current controlled switch" Ab
+W$1 ${2:N+} ${3:N-} ${4:voltage_source_name} ${5:model} ${6:ON|OFF}
+endsnippet
+
+
+
+
+
+snippet beg "template" Ab
+.TITLE $1
+$2
+.END
+endsnippet
+
+snippet sub "subcircuit" Ab
+.SUBCKT ${1:subckt_name} ${2:\{port_name\}} ${3:[\{ident=value\}]}
+$4
+.ENDS$0
+endsnippet
+
+snippet glob "global" Ab
+.GLOBAL ${1:\{node_name\}}
+endsnippet
+
+snippet inc "include" Ab
+.INCLUDE ${1:file_path}
+endsnippet
+
+snippet lib "Library Declaration" Ab
+.LIB ${1:file_path} ${2:lib_name}
+endsnippet
+
+snippet param "Parameter Declaration" Ab
+.param ${3:\{ident=value\}}
+endsnippet
+
+snippet func "Function Declaration" Ab
+.func ${1:ident}='${2:expr}'
+endsnippet
+
+snippet temp "Temperature Declaration" Ab
+.TEMP ${1:value}
+endsnippet
+
+snippet if "if statement" b
+.if ${1:(cond)}
+$2
+.endif$0
+endsnippet
+
+snippet if "if else statement" b
+.if ${1:(cond)}
+$2
+else
+$3
+.endif$0
+endsnippet
+
+
+
+
+
+
+
+snippet .tran ".ac type np fstart fsto" Ab
+.tran ${1:tstep} ${2:tstop}
+endsnippet
+
+snippet .ac ".ac type np fstart fsto" Ab
+.ac ${1:dec,oct,lin,poi} ${2:number_of_points} ${3:f_start} ${4:f_stop}
+endsnippet
+
+snippet .dc ".DC var1 START=start1 STOP=stop1 STEP=incr1" Ab
+.dc ${1:variable_to_sweep} ${2:start} ${3:stop} ${4:step}
+endsnippet
+
+snippet .model "model"
+.model ${1:model_name} ${2:component}
+endsnippet
+
+snippet .cont "Control block" Ab
+.control
+$1
+.endc$0
+endsnippet
